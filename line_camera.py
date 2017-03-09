@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- confing:utf-8 -*-
+#-*- coding:utf-8 -*-
 
 import cv2
 import io
@@ -8,12 +8,12 @@ import serial
 import picamera
 
 #Algorithm parameters
-camera_width = 160
-camera_height = 120
 flame_size = 3    #Frame reduction parameter
 Gauss = (9,9)     #Gaussbluer filter parameter 
 threshold = 230   #Threshold of binarization (max:254)
 min_area = 1000   #Area filter pareater
+#camera_width = 160
+#camera_height = 120
 
 #Line trace algorithm 
 def line_trace():
@@ -21,15 +21,15 @@ def line_trace():
     while True:
         
         #Video capture
-        #ret , flame = cap.read()
-        #if ret == False :
-        #    print("Error: Camera capture failed.")
-        #    break
+        ret , flame = cap.read()
+        if ret == False :
+            print("Error: Camera capture failed.")
+            break
         
-        #Resize of window scale
-        #height , width = flame.shape[:2]
-        #hflame = cv2.resize(flame,(width/flame_size,height/flame_size))
-        #h_height, h_width = hflame.shape[:2]
+        Resize of window scale
+        height , width = flame.shape[:2]
+        hflame = cv2.resize(flame,(width/flame_size,height/flame_size))
+        h_height, h_width = hflame.shape[:2]
         result = hflame
 
         #Gray scale , noise filter and binarization
@@ -68,7 +68,7 @@ def line_trace():
         cv2.imshow('Line Teace',result)
 
         #Send results to mbed
-        ser.write(str(dev)+" ")
+        #ser.write(str(dev)+" ")
 
         #End process
         if cv2.waitKey(1) == ord('q'):
@@ -81,19 +81,19 @@ if __name__ == '__main__':
     ser = serial.Serial('/dev/ttyACM0',115200)
     
     #Open the camera
-    #cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0)
     
-    stream = io.BytesIO()
-    with picamera.PiCamera() as camera:
-        camera.resolution = (camera_width, camera_height)
-        camera.capture(stream, format='jpeg')
-    data = np.fromstring(stream.getvalue(), dtype=np.uint8)
-    hflame = cv2.imdecode(data, 1)
+    #stream = io.BytesIO()
+    #with picamera.PiCamera() as camera:
+    #   camera.resolution = (camera_width, camera_height)
+    #    camera.capture(stream, format='jpeg')
+    #data = np.fromstring(stream.getvalue(), dtype=np.uint8)
+    #hflame = cv2.imdecode(data, 1)
 
     line_trace()
 
-    #cap.release()
+    cap.release()
     cv2.destroyAllWindows()
-    ser.close
+    #ser.close
 
     print("End of line trace algorithm.")
