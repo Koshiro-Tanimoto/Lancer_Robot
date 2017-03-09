@@ -26,7 +26,7 @@ def line_trace():
             print("Error: Camera capture failed.")
             break
         
-        Resize of window scale
+        #Resize of window scale
         height , width = flame.shape[:2]
         hflame = cv2.resize(flame,(width/flame_size,height/flame_size))
         h_height, h_width = hflame.shape[:2]
@@ -78,7 +78,7 @@ def line_trace():
 if __name__ == '__main__':
     
     #Serail config (to mbed)
-    ser = serial.Serial('/dev/ttyACM0',115200)
+    #ser = serial.Serial('/dev/ttyACM0',115200)
     
     #Open the camera
     cap = cv2.VideoCapture(0)
