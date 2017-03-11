@@ -68,17 +68,18 @@ def line_trace():
         cv2.imshow('Line Teace',result)
 
         #Send results to mbed
-        #ser.write(str(dev)+" ")
+        ser.write(str(dev)+" ")
 
         #End process
         if cv2.waitKey(1) == ord('q'):
+            ser.write(str(999)+" ")
             break
 
 #Main function
 if __name__ == '__main__':
     
     #Serail config (to mbed)
-    #ser = serial.Serial('/dev/ttyACM0',115200)
+    ser = serial.Serial('/dev/ttyACM0',115200)
     
     #Open the camera
     cap = cv2.VideoCapture(0)
@@ -94,6 +95,6 @@ if __name__ == '__main__':
 
     cap.release()
     cv2.destroyAllWindows()
-    #ser.close
+    ser.close
 
     print("End of line trace algorithm.")
